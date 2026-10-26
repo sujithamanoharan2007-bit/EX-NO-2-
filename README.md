@@ -34,10 +34,131 @@ STEP-5: Display the obtained cipher text.
 
 
 
-Program:
+## Program:
+
+~~~
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main()
+{
+    char text[100], key[100], matrix[5][5];
+    int used[26] = {0};
+    int i, j, k = 0, r1, c1, r2, c2;
+    char a, b, temp;
+
+    printf("Enter Plain Text: ");
+    scanf("%99s", text);
+
+    printf("Enter Key: ");
+    scanf("%99s", key);
+
+    for (i = 0; key[i] != '\0'; i++)
+    {
+        temp = toupper(key[i]);
+
+        if (temp == 'J')
+            temp = 'I';
+
+        if (temp >= 'A' && temp <= 'Z' &&
+            !used[temp - 'A'])
+        {
+            matrix[k / 5][k % 5] = temp;
+            used[temp - 'A'] = 1;
+            k++;
+        }
+    }
+
+    used['J' - 'A'] = 1;
+
+    for (i = 0; i < 26; i++)
+    {
+        if (!used[i])
+        {
+            matrix[k / 5][k % 5] = 'A' + i;
+            k++;
+        }
+    }
+
+    for (i = 0; text[i] != '\0'; i++)
+        text[i] = toupper(text[i]);
+
+    printf("\nKey Matrix:\n");
+
+    for (i = 0; i < 5; i++)
+    {
+        for (j = 0; j < 5; j++)
+            printf("%c ", matrix[i][j]);
+
+        printf("\n");
+    }
+
+    printf("\nCipher Text: ");
+
+    for (i = 0; text[i] != '\0'; i += 2)
+    {
+        a = text[i];
+        b = text[i + 1];
+
+        if (a == 'J') a = 'I';
+        if (b == 'J') b = 'I';
+
+        if (b == '\0' || a == b)
+        {
+            b = 'X';
+            i--;
+            if (text[i + 1] == '\0')
+                i++;
+        }
+
+        for (r1 = 0; r1 < 5; r1++)
+            for (c1 = 0; c1 < 5; c1++)
+                if (matrix[r1][c1] == a)
+                    goto found1;
+
+        found1:
+
+        for (r2 = 0; r2 < 5; r2++)
+            for (c2 = 0; c2 < 5; c2++)
+                if (matrix[r2][c2] == b)
+                    goto found2;
+
+        found2:
+
+        if (r1 == r2)
+        {
+            printf("%c%c",
+                matrix[r1][(c1 + 1) % 5],
+                matrix[r2][(c2 + 1) % 5]);
+        }
+        else if (c1 == c2)
+        {
+            printf("%c%c",
+                matrix[(r1 + 1) % 5][c1],
+                matrix[(r2 + 1) % 5][c2]);
+        }
+        else
+        {
+            printf("%c%c",
+                matrix[r1][c2],
+                matrix[r2][c1]);
+        }
+    }
+
+    printf("\n");
+
+    return 0;
+}
+~~~
 
 
 
 
 
-Output:
+## Output:
+<img width="361" height="480" alt="image" src="https://github.com/user-attachments/assets/093193e0-a96c-4b7b-8a3a-f1ec6b300b2d" />
+
+## Result:
+Thus, the Playfair cipher encryption program was implemented successfully using C language.
+
